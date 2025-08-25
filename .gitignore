@@ -1,8 +1,34 @@
-target/
-.idea/
-*.iml
-*.log
-*.DS_Store
+# OS
+.DS_Store
+Thumbs.db
+
+# Java/Maven (aplica a todos los subproyectos)
+**/target/
+**/dependency-reduced-pom.xml
+**/hs_err_pid*.log
+**/.mvn/timing.properties
+
+# Logs
+**/*.log
+**/logs/
+
+# IDEs
+**/.idea/
+**/*.iml
+**/*.ipr
+**/*.iws
+**/.project
+**/.classpath
+**/.settings/
+
+# VS Code: ignora todo menos el workspace (útil)
 .vscode/
-!.vscode/*.json
-.mvn/wrapper/maven-wrapper.jar
+!.vscode/tech-test.code-workspace
+
+# Node (por si algún día hay frontend en el monorepo)
+**/node_modules/
+**/dist/
+**/build/
+
+# Docker/Entorno
+.env
