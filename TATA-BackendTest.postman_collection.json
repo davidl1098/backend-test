@@ -1,0 +1,503 @@
+{
+  "info": {
+    "_postman_id": "99c4a021-16af-4924-88ec-bff83018d80b",
+    "name": "TATA - Backend Test (Clientes & Cuentas)",
+    "description": "Colección para validar los endpoints de clientes-service y cuentas-service según el PDF.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "clientes_base",
+      "value": "http://localhost:8081"
+    },
+    {
+      "key": "cuentas_base",
+      "value": "http://localhost:8082"
+    },
+    {
+      "key": "clienteIdCodigo",
+      "value": "CLI-100"
+    },
+    {
+      "key": "fecha_desde",
+      "value": "2025-02-01"
+    },
+    {
+      "key": "fecha_hasta",
+      "value": "2025-02-28"
+    }
+  ],
+  "item": [
+    {
+      "name": "Clientes",
+      "item": [
+        {
+          "name": "Crear cliente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{clientes_base}}/api/clientes",
+              "host": [
+                "{{clientes_base}}"
+              ],
+              "path": [
+                "api",
+                "clientes"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clienteId\": \"{{clienteIdCodigo}}\",\n  \"nombre\": \"Ana\",\n  \"genero\": \"F\",\n  \"edad\": 30,\n  \"identificacion\": \"0102030405\",\n  \"direccion\": \"Av. Siempre Viva\",\n  \"telefono\": \"0999999999\",\n  \"estado\": true,\n  \"contrasenia\": \"Secreta123\"\n}"
+            },
+            "description": "Crea un cliente. Guarda el 'id' en variable de colección 'cliente_id'."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201', function(){ pm.response.to.have.status(201); });",
+                  "var json = pm.response.json();",
+                  "pm.collectionVariables.set('cliente_id', json.id);",
+                  "pm.collectionVariables.set('clienteIdCodigo', json.clienteId);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Obtener cliente por ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{clientes_base}}/api/clientes/{{cliente_id}}",
+              "host": [
+                "{{clientes_base}}"
+              ],
+              "path": [
+                "api",
+                "clientes",
+                "{{cliente_id}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Actualizar cliente",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{clientes_base}}/api/clientes/{{cliente_id}}",
+              "host": [
+                "{{clientes_base}}"
+              ],
+              "path": [
+                "api",
+                "clientes",
+                "{{cliente_id}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"{{cliente_id}}\",\n  \"clienteId\": \"{{clienteIdCodigo}}\",\n  \"nombre\": \"Ana Actualizada\",\n  \"genero\": \"F\",\n  \"edad\": 31,\n  \"identificacion\": \"0102030405\",\n  \"direccion\": \"Nueva 123\",\n  \"telefono\": \"0991111111\",\n  \"estado\": true,\n  \"contrasenia\": \"OtraClave\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Eliminar cliente",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{clientes_base}}/api/clientes/{{cliente_id}}",
+              "host": [
+                "{{clientes_base}}"
+              ],
+              "path": [
+                "api",
+                "clientes",
+                "{{cliente_id}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 204', () => pm.response.to.have.status(204));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Cuentas",
+      "item": [
+        {
+          "name": "Crear cuenta",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{cuentas_base}}/api/cuentas",
+              "host": [
+                "{{cuentas_base}}"
+              ],
+              "path": [
+                "api",
+                "cuentas"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numero\": \"CTA-100\",\n  \"tipo\": \"Ahorro\",\n  \"clienteId\": \"{{clienteIdCodigo}}\",\n  \"estado\": true,\n  \"saldo\": 0\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201', function(){ pm.response.to.have.status(201); });",
+                  "var json = pm.response.json();",
+                  "pm.collectionVariables.set('cuenta_id', json.id);",
+                  "pm.collectionVariables.set('cuenta_numero', json.numero);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Obtener cuenta por ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{cuentas_base}}/api/cuentas/{{cuenta_id}}",
+              "host": [
+                "{{cuentas_base}}"
+              ],
+              "path": [
+                "api",
+                "cuentas",
+                "{{cuenta_id}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Actualizar cuenta",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{cuentas_base}}/api/cuentas/{{cuenta_id}}",
+              "host": [
+                "{{cuentas_base}}"
+              ],
+              "path": [
+                "api",
+                "cuentas",
+                "{{cuenta_id}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"{{cuenta_id}}\",\n  \"numero\": \"CTA-100\",\n  \"tipo\": \"Ahorro\",\n  \"clienteId\": \"{{clienteIdCodigo}}\",\n  \"estado\": true,\n  \"saldo\": 0\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Eliminar cuenta",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{cuentas_base}}/api/cuentas/{{cuenta_id}}",
+              "host": [
+                "{{cuentas_base}}"
+              ],
+              "path": [
+                "api",
+                "cuentas",
+                "{{cuenta_id}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 204', () => pm.response.to.have.status(204));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar cuentas",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{cuentas_base}}/api/cuentas",
+              "host": [
+                "{{cuentas_base}}"
+              ],
+              "path": [
+                "api",
+                "cuentas"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Movimientos",
+      "item": [
+        {
+          "name": "Abono (Crédito, valor positivo)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{cuentas_base}}/api/movimientos",
+              "host": [
+                "{{cuentas_base}}"
+              ],
+              "path": [
+                "api",
+                "movimientos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cuentaId\": \"{{cuenta_id}}\",\n  \"valor\": 200.0\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "pm.test('Tiene saldo_resultante', () => pm.expect(pm.response.json().saldoResultante).to.be.a('number'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Retiro (Débito, valor negativo)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{cuentas_base}}/api/movimientos",
+              "host": [
+                "{{cuentas_base}}"
+              ],
+              "path": [
+                "api",
+                "movimientos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cuentaId\": \"{{cuenta_id}}\",\n  \"valor\": -50.0\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Retiro inválido (sobregiro)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{cuentas_base}}/api/movimientos",
+              "host": [
+                "{{cuentas_base}}"
+              ],
+              "path": [
+                "api",
+                "movimientos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cuentaId\": \"{{cuenta_id}}\",\n  \"valor\": -999999.0\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', () => pm.response.to.have.status(400));",
+                  "pm.test('Mensaje saldo no disponible', () => pm.expect(pm.response.json().message).to.match(/Saldo no disponible/i));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Reportes",
+      "item": [
+        {
+          "name": "Estado de cuenta por cliente y rango",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{cuentas_base}}/api/reportes?clienteId={{clienteIdCodigo}}&desde={{fecha_desde}}&hasta={{fecha_hasta}}",
+              "host": [
+                "{{cuentas_base}}"
+              ],
+              "path": [
+                "api",
+                "reportes"
+              ],
+              "query": [
+                {
+                  "key": "clienteId",
+                  "value": "{{clienteIdCodigo}}"
+                },
+                {
+                  "key": "desde",
+                  "value": "{{fecha_desde}}"
+                },
+                {
+                  "key": "hasta",
+                  "value": "{{fecha_hasta}}"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Incluye cuentas[]', () => pm.expect(pm.response.json().cuentas).to.be.an('array'));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
