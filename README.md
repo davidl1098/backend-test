@@ -6,6 +6,8 @@ Microservicios en \*\*Java 21 / Spring Boot 3\*\*, \*\*PostgreSQL\*\*, \*\*Rabbi
 
 Incluye \*\*colección Postman\*\* y script \*\*BaseDatos.sql\*\*.
 
+Cada microservicio cuenta con su paquete de pruebas unitarias y de integracion
+
 
 
 ---
