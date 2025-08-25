@@ -2,32 +2,24 @@ package com.tata.clientes_service.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.UUID;
-
 
 @Entity
-@Table(name = "cliente", schema = "clientes", indexes = { @Index(name = "ix_cliente_estado", columnList = "estado") })
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString(exclude = {"persona", "contrasena"}) 
-public class Cliente {
-    @Id
-    @GeneratedValue
-    @EqualsAndHashCode.Include
-    private UUID id;
+@Table(name = "cliente", schema = "clientes",
+       indexes = {
+         @Index(name = "ix_cliente_estado", columnList = "estado"),
+         @Index(name = "ix_cliente_clienteid", columnList = "cliente_id", unique = true)
+       })
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
+@ToString(callSuper = true, exclude = "contraseniaHash")
+public class Cliente extends Persona {
 
-    @OneToOne(optional = false)
-    @JoinColumn(name = "persona_id", nullable = false, unique = true)
-    private Persona persona; 
+    @Column(name = "cliente_id", nullable = false, length = 64, unique = true)
+    private String clienteId;           
 
-    @Column(nullable = false, length = 120)
-    private String contrasena; 
+    @Column(name = "contrasenia_hash", nullable = false, length = 120)
+    private String contraseniaHash;      
 
-    @Column(nullable = false, length = 20)
-    private String estado = "ACTIVE";
-
+    @Column(nullable = false)
+    private Boolean estado = Boolean.TRUE;  
 }
