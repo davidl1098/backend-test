@@ -9,7 +9,7 @@ import java.util.*;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
-  
+
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<Map<String, Object>> handleValidation(MethodArgumentNotValidException ex) {
     var errors = ex.getBindingResult().getFieldErrors().stream()
@@ -22,8 +22,25 @@ public class ApiExceptionHandler {
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Recurso no encontrado"));
   }
 
-  @ExceptionHandler({ IllegalArgumentException.class, DataIntegrityViolationException.class })
+  @ExceptionHandler({ IllegalArgumentException.class, DataIntegrityViolationException.class, RuntimeException.class })
   public ResponseEntity<Map<String, Object>> handleBadRequest(RuntimeException ex) {
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", ex.getMessage()));
+    HttpStatus status;
+    String code;
+
+    if (ex instanceof DataIntegrityViolationException) {
+      status = HttpStatus.CONFLICT; 
+      code = "DATA_INTEGRITY";
+    } else if (ex instanceof IllegalArgumentException) {
+      status = HttpStatus.BAD_REQUEST; 
+      code = "VALIDATION_ERROR";
+    } else {
+      status = HttpStatus.INTERNAL_SERVER_ERROR; 
+      code = "GENERIC_ERROR";
+    }
+
+    return ResponseEntity.status(status).body(Map.of(
+        "code", code, 
+        "status", status.value(), 
+        "message", ex.getMessage()));
   }
 }

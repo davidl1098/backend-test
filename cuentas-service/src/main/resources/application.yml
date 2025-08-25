@@ -1,19 +1,19 @@
 server:
-  port: 8081
+  port: 8082
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/test?currentSchema=clientes
+    url: jdbc:postgresql://localhost:5432/test?currentSchema=cuentas
     username: test
     password: test
   jpa:
     hibernate:
-      ddl-auto: validate    
+      ddl-auto: validate
     open-in-view: false
   flyway:
     enabled: true
-    schemas: clientes
-    default-schema: clientes
+    schemas: cuentas
+    default-schema: cuentas
   rabbitmq:
     host: localhost
     port: 5672
